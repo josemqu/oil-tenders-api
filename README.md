@@ -59,7 +59,6 @@ FastAPI service exposing a read-only REST API over your Supabase Postgres databa
 - Generic filters (repeatable):
   ```
   GET /offers?eq=country:US&eq=port:NY&ilike=grade:jet&min=volume:1000&max=volume:5000
-  ```
 - Fetch by primary key value:
   ```
   GET /offers/{id}
@@ -73,3 +72,30 @@ FastAPI service exposing a read-only REST API over your Supabase Postgres databa
 - The service enforces read-only transactions and sets a 15s statement timeout.
 - The primary key is auto-detected; if not found, it defaults to `id`.
 - If your table/columns differ, update `OFFERS_TABLE_NAME` or use the generic filter params.
+
+## Deploy to Railway
+Deploy this FastAPI service to Railway using the included `Procfile`.
+
+### Steps
+- Connect this repository to Railway (via the Railway dashboard) or use the Railway CLI.
+- Railway will detect Python from `requirements.txt` and use the `Procfile` to start the web process.
+- Set the following environment variables in the Railway project:
+  - `SUPABASE_HOST`
+  - `SUPABASE_PORT` (default: `5432`)
+  - `SUPABASE_DB_NAME` (default: `postgres`)
+  - `SUPABASE_USER` (default: `postgres`)
+  - `SUPABASE_PASSWORD`
+  - `OFFERS_TABLE_NAME` (default: `oil_offers_export`)
+  - Optional tuning: `DB_POOL_MIN` (default: `1`), `DB_POOL_MAX` (default: `10`)
+
+### Start command
+Defined in `Procfile`:
+```
+web: uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
+```
+Railway provides the `PORT` variable automatically.
+
+### Health and docs
+- Health: `GET /health`
+- Swagger UI: `/docs`
+- ReDoc: `/redoc`
