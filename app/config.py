@@ -32,7 +32,6 @@ def env_int(key: str, default: Optional[int] = None) -> Optional[int]:
 
 SUPABASE_HOST = env_str("SUPABASE_HOST")
 SUPABASE_PORT = env_int("SUPABASE_PORT", 5432) or 5432
-SUPABASE_DB_NAME = env_str("SUPABASE_DB_NAME", "postgres") or "postgres"
 SUPABASE_USER = env_str("SUPABASE_USER", "postgres") or "postgres"
 SUPABASE_PASSWORD = env_str("SUPABASE_PASSWORD") or ""
 SUPABASE_POOL_MODE = env_str("SUPABASE_POOL_MODE", "session") or "session"
@@ -47,6 +46,12 @@ APP_DEBUG = env_str("APP_DEBUG", "false").lower() in ("1", "true", "yes", "on")
 POOL_MIN_SIZE = env_int("DB_POOL_MIN", 1) or 1
 POOL_MAX_SIZE = env_int("DB_POOL_MAX", 10) or 10
 
+# CORS origins (comma-separated). Example: http://localhost:3000,http://localhost:5173
+def _parse_list(val: str) -> list[str]:
+    return [item.strip() for item in val.split(",") if item and item.strip()]
+
+_DEFAULT_ORIGINS = "http://localhost:3000,http://localhost:5173,http://127.0.0.1:3000,http://127.0.0.1:5173"
+ALLOWED_ORIGINS = _parse_list(env_str("ALLOWED_ORIGINS", _DEFAULT_ORIGINS) or _DEFAULT_ORIGINS) or ["*"]
 
 def build_conninfo() -> str:
     host = SUPABASE_HOST
@@ -57,6 +62,5 @@ def build_conninfo() -> str:
     # Enforce SSL for Supabase and readonly at session level later
     # Note: we don't embed read_only here because psycopg3 exposes a connection attribute
     return (
-        f"host={host} port={port} dbname={db} user={user} password={password} "
-        f"sslmode=require"
+        f"host={host} port={port} dbname={db} user={user} password={password} sslmode=require"
     )
