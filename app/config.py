@@ -39,13 +39,13 @@ SUPABASE_POOL_MODE = env_str("SUPABASE_POOL_MODE")
 OFFERS_TABLE_NAME = env_str("OFFERS_TABLE_NAME")
 
 # Optional app settings
-APP_PORT = env_int("APP_PORT", 8000) or 8000
-APP_HOST = env_str("APP_HOST", "0.0.0.0") or "0.0.0.0"
-APP_DEBUG = env_str("APP_DEBUG", "false").lower() in ("1", "true", "yes", "on")
+APP_PORT = env_int("APP_PORT") or 8000
+APP_HOST = env_str("APP_HOST") or "0.0.0.0"
+APP_DEBUG = env_str("APP_DEBUG").lower() in ("1", "true", "yes", "on")
 
 # Connection pool sizes
-POOL_MIN_SIZE = env_int("DB_POOL_MIN", 1) or 1
-POOL_MAX_SIZE = env_int("DB_POOL_MAX", 10) or 10
+POOL_MIN_SIZE = env_int("DB_POOL_MIN") or 1
+POOL_MAX_SIZE = env_int("DB_POOL_MAX") or 10
 
 
 def build_conninfo() -> str:
