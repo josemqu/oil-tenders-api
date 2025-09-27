@@ -13,6 +13,31 @@ FastAPI service exposing a read-only REST API over your Supabase Postgres databa
   - Convenience: `company`, `company_like`, `product`, `product_like`, `volume_min`, `volume_max`, and `id` (primary key).
   - Generic: `eq=col:value`, `ilike=col:value`, `min=col:value`, `max=col:value` (can repeat multiple times).
 
+## CORS
+This service enables configurable CORS via FastAPI's `CORSMiddleware`.
+
+Environment variables in `.env.local` control behavior (defaults shown):
+
+```
+CORS_ORIGINS=*                 # Comma-separated list or *
+CORS_ALLOW_METHODS=*           # Comma-separated list or *
+CORS_ALLOW_HEADERS=*           # Comma-separated list or *
+CORS_ALLOW_CREDENTIALS=false   # true/false
+```
+
+Examples:
+- Allow local frontend only:
+  ```
+  CORS_ORIGINS=http://localhost:3000
+  CORS_ALLOW_METHODS=GET,OPTIONS
+  CORS_ALLOW_HEADERS=Content-Type,Authorization
+  CORS_ALLOW_CREDENTIALS=false
+  ```
+- Allow multiple origins:
+  ```
+  CORS_ORIGINS=http://localhost:3000,https://myapp.com
+  ```
+
 ## Requirements
 - Python 3.10+
 

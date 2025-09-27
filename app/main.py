@@ -3,12 +3,22 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 
 from . import config
 from .db import get_conn, init_pool, close_pool
 from .schema import get_columns, get_primary_key, list_valid_columns
 
 app = FastAPI(title="Oil Tenders API", version="0.1.0")
+
+# CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=config.CORS_ORIGINS,
+    allow_credentials=config.CORS_ALLOW_CREDENTIALS,
+    allow_methods=config.CORS_ALLOW_METHODS,
+    allow_headers=config.CORS_ALLOW_HEADERS,
+)
 
 # Cached table metadata
 _TABLE_COLUMNS: List[str] = []

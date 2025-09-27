@@ -30,6 +30,21 @@ def env_int(key: str, default: Optional[int] = None) -> Optional[int]:
         return default
 
 
+def env_bool(key: str, default: bool = False) -> bool:
+    v = os.getenv(key)
+    if v is None:
+        return default
+    return str(v).strip().lower() in ("1", "true", "yes", "on")
+
+
+def env_list(key: str, default: Optional[list[str]] = None) -> list[str]:
+    v = os.getenv(key)
+    if v is None:
+        return default or []
+    # Split by comma and strip spaces; ignore empty entries
+    return [item.strip() for item in v.split(",") if item.strip()]
+
+
 SUPABASE_HOST = env_str("SUPABASE_HOST")
 SUPABASE_PORT = env_int("SUPABASE_PORT")
 SUPABASE_DB_NAME = env_str("SUPABASE_DB_NAME")
@@ -46,6 +61,29 @@ APP_DEBUG = env_str("APP_DEBUG", "false").lower() in ("1", "true", "yes", "on")
 # Connection pool sizes
 POOL_MIN_SIZE = env_int("DB_POOL_MIN", 1) or 1
 POOL_MAX_SIZE = env_int("DB_POOL_MAX", 10) or 10
+
+# CORS settings
+# CORS_ORIGINS can be a comma-separated list (e.g., "http://localhost:3000,https://myapp.com") or "*"
+_cors_origins_raw = env_str("CORS_ORIGINS", "*") or "*"
+if _cors_origins_raw == "*":
+    CORS_ORIGINS: list[str] = ["*"]
+else:
+    CORS_ORIGINS = [o for o in env_list("CORS_ORIGINS")]
+
+# Methods and headers default to allow all
+_cors_methods_raw = env_str("CORS_ALLOW_METHODS", "*") or "*"
+if _cors_methods_raw == "*":
+    CORS_ALLOW_METHODS: list[str] = ["*"]
+else:
+    CORS_ALLOW_METHODS = [m for m in env_list("CORS_ALLOW_METHODS")]
+
+_cors_headers_raw = env_str("CORS_ALLOW_HEADERS", "*") or "*"
+if _cors_headers_raw == "*":
+    CORS_ALLOW_HEADERS: list[str] = ["*"]
+else:
+    CORS_ALLOW_HEADERS = [h for h in env_list("CORS_ALLOW_HEADERS")]
+
+CORS_ALLOW_CREDENTIALS: bool = env_bool("CORS_ALLOW_CREDENTIALS", False)
 
 
 def build_conninfo() -> str:
