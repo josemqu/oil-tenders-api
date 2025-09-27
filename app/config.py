@@ -31,12 +31,12 @@ def env_int(key: str, default: Optional[int] = None) -> Optional[int]:
 
 
 SUPABASE_HOST = env_str("SUPABASE_HOST")
-SUPABASE_PORT = env_int("SUPABASE_PORT", 5432) or 5432
-SUPABASE_DB_NAME = env_str("SUPABASE_DB_NAME", "postgres") or "postgres"
-SUPABASE_USER = env_str("SUPABASE_USER", "postgres") or "postgres"
-SUPABASE_PASSWORD = env_str("SUPABASE_PASSWORD") or ""
-SUPABASE_POOL_MODE = env_str("SUPABASE_POOL_MODE", "session") or "session"
-OFFERS_TABLE_NAME = env_str("OFFERS_TABLE_NAME", "oil_offers_export") or "oil_offers_export"
+SUPABASE_PORT = env_int("SUPABASE_PORT")
+SUPABASE_DB_NAME = env_str("SUPABASE_DB_NAME")
+SUPABASE_USER = env_str("SUPABASE_USER")
+SUPABASE_PASSWORD = env_str("SUPABASE_PASSWORD")
+SUPABASE_POOL_MODE = env_str("SUPABASE_POOL_MODE")
+OFFERS_TABLE_NAME = env_str("OFFERS_TABLE_NAME")
 
 # Optional app settings
 APP_PORT = env_int("APP_PORT", 8000) or 8000
